@@ -10,9 +10,22 @@
 		0538B9BF2E8FE870008D80F0 /* Bonews.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Bonews.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		0538BA762E90720F008D80F0 /* Exceptions for "Bonews" folder in "Bonews" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 0538B9BE2E8FE870008D80F0 /* Bonews */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		0538B9C12E8FE870008D80F0 /* Bonews */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				0538BA762E90720F008D80F0 /* Exceptions for "Bonews" folder in "Bonews" target */,
+			);
 			path = Bonews;
 			sourceTree = "<group>";
 		};
