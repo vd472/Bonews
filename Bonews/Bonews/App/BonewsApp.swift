@@ -11,7 +11,9 @@ import SwiftUI
 struct BonewsApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            NavigationStack {
+                NewsHeadlinesView()
+            }
         }
     }
 }
