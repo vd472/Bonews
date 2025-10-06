@@ -16,3 +16,4 @@ App functionalities
 Scope for future
 - Increase in Unit/ UI Testing
 - Dependency Injection for mocks and other functionalities
+- Accessibility
