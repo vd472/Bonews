@@ -22,12 +22,19 @@ final class ApiRequest: ApiServiceProtocol {
     
     // MARK: - Common method for request of image and news
     private func executeRequest(_ request: ApiRequestType) async throws -> Data {
+        
+        guard let url = request.url else {
+            throw ApiError.invalidURL
+        }
+        
         guard var components = URLComponents(url: request.url!, resolvingAgainstBaseURL: false) else {
             throw ApiError.invalidURL
         }
+        
         if let queryItems = request.queryItems {
             components.queryItems = (components.queryItems ?? []) + queryItems
         }
+        
         guard let finalURL = components.url else {
             throw ApiError.invalidURL
         }
@@ -42,9 +49,11 @@ final class ApiRequest: ApiServiceProtocol {
         guard let httpResponse = response as? HTTPURLResponse else {
             throw ApiError.requestError(underlyingError: URLError(.badServerResponse))
         }
+        
         guard (200...299).contains(httpResponse.statusCode) else {
             throw ApiError.httpError(statusCode: httpResponse.statusCode)
         }
+        
         guard !data.isEmpty else {
             throw ApiError.noData
         }
