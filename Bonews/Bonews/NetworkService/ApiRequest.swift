@@ -57,13 +57,13 @@ final class ApiRequest: ApiServiceProtocol {
 // MARK: - Extension of ApiRequest confirming the protocol ApiServiceProtocol
 extension ApiRequest {
     // MARK: - request headlines
-    func request<T: Codable>(_ request: ApiRequestType, responseType: T.Type) async throws -> T {
+    nonisolated func request<T: Codable>(_ request: ApiRequestType, responseType: T.Type) async throws -> T {
         let data = try await executeRequest(request)
         return try JSONDecoder().decode(T.self, from: data)
     }
 
     // MARK: - request image
-    func requestImage(_ request: ApiRequestType) async throws -> UIImage {
+    nonisolated func requestImage(_ request: ApiRequestType) async throws -> UIImage {
         let data = try await executeRequest(request)
         guard let image = UIImage(data: data) else {
             throw ApiError.requestError(underlyingError: URLError(.cannotDecodeContentData))
