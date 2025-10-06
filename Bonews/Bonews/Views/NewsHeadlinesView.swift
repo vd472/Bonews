@@ -47,6 +47,10 @@ struct NewsHeadlinesView: View {
                                         .onTapGesture {
                                             selectedArticle = article
                                         }
+                                        .onAppear {
+                                           // Load more articles when reaching the last few items
+                                           paginate(index: index)
+                                        }
                                 } else if index == 1 || (index > 1 && (index - 1) % 7 == 0) {
                                     let batchStart = index
                                     let batchEnd = min(batchStart + 6, viewModel.articles.count)
@@ -57,6 +61,10 @@ struct NewsHeadlinesView: View {
                                             NewsArticleCardView(article: article, isFullWidth: false, geometry: geometry)
                                                 .onTapGesture {
                                                     selectedArticle = article
+                                                }
+                                                .onAppear {
+                                                    // Load more articles when reaching the last few items
+                                                    paginate(index: index)
                                                 }
                                         }
                                     }
@@ -102,6 +110,15 @@ struct NewsHeadlinesView: View {
             }
             .sheet(item: $selectedArticle) { article in
                 NewsDetailView(article: article)
+            }
+        }
+    }
+    
+    private func paginate(index: Int) {
+        // Load more articles when reaching the last few items
+        if index >= viewModel.articles.count - 1 && viewModel.hasMoreArticles && !viewModel.isLoadingMore {
+            Task{
+                await viewModel.loadMoreArticles()
             }
         }
     }

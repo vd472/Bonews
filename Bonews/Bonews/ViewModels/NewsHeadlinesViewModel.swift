@@ -14,6 +14,18 @@ class NewsHeadlinesViewModel: ObservableObject {
     @Published var isLoading = false
     @Published var errorMessage: String?
     @Published var lastRefreshDate: Date?
+    @Published var hasMoreArticles = true
+    @Published var isLoadingMore = false
+    
+    private var currentPage = 1
+    private let apiService = ApiRequest()
+    private var apikey : String {
+        guard let apikey =  Bundle.main.object(forInfoDictionaryKey: "API_KEY") as? String else {
+            print("apiKey not found")
+            return ""
+        }
+       return apikey
+    }
     
     init() {
     }
@@ -21,32 +33,39 @@ class NewsHeadlinesViewModel: ObservableObject {
     // MARK: - Fetch News Headlines via ViewModel
     
     func fetchHeadlines() async {
-        let apiService = ApiRequest()
         isLoading = true
         errorMessage = nil
-        guard let apikey =  Bundle.main.object(forInfoDictionaryKey: "API_KEY") as? String else {
-            print("apiKey not found")
-            return
-        }
+        await loadData()
+        isLoading = false
+    }
+    
+    // Load data from api
+    private func loadData(_ currentPage: Int = 1) async {
         do {
             // Fetch from API
-            let fetchedData = try await apiService.request(ApiRequestBuilder.init(apiKey: apikey), responseType: NewsResponse.self)
+            let fetchedData = try await apiService.request(ApiRequestBuilder.init(apiKey: apikey, page: currentPage), responseType: NewsResponse.self)
             
-            // model fetch data into NewsArticle
-            let newsArticles = await loadNewsArticle(fetchedData)
-            
-            // Load images for articles
-            let articlesWithImages = await loadImagesForArticles(newsArticles)
-            
-            // Update UI with fresh data
-            articles = articlesWithImages
-            lastRefreshDate = Date()
-            
+            if fetchedData.articles.count != 0 {
+                // model fetch data into NewsArticle
+                let newsArticles = await loadNewsArticle(fetchedData)
+                
+                // Load images for articles
+                let articlesWithImages = await loadImagesForArticles(newsArticles)
+                
+                // Update UI with fresh data
+                articles.append(contentsOf: articlesWithImages)
+                lastRefreshDate = Date()
+                hasMoreArticles = true
+            } else {
+                hasMoreArticles = false
+            }
         } catch {
+            if currentPage != 1 {
+                self.currentPage -= 1
+            }
             errorMessage = "Failed to fetch latest news: \(error.localizedDescription)"
         }
         
-        isLoading = false
     }
     
     // model fetch data into NewsArticle
@@ -69,15 +88,14 @@ class NewsHeadlinesViewModel: ObservableObject {
         
     // Load images for articles
     private func loadImagesForArticles(_ articles: [NewsArticle]) async -> [NewsArticle] {
-        return await withTaskGroup(of: NewsArticle.self) { group in
+        return await withTaskGroup(of: NewsArticle.self) {[weak self] group in
             var articlesWithImages: [NewsArticle] = []
-            let apiService = ApiRequest()
             for article in articles {
                 group.addTask {
                     var updatedArticle = article
                     if let imageURL = article.imageURL {
                         do {
-                            let image = try await apiService.requestImage(ApiRequestBuilder.init(rawURL: imageURL))
+                            let image = try await self?.apiService.requestImage(ApiRequestBuilder.init(rawURL: imageURL))
                             updatedArticle.loadedImage = image
                         } catch {
                             print("Failed to load image for article: \(String(describing:article.title))")
@@ -99,7 +117,19 @@ class NewsHeadlinesViewModel: ObservableObject {
 extension NewsHeadlinesViewModel {
     // Refresh
     func refresh() async {
+        hasMoreArticles = true
+        currentPage = 1
+        articles.removeAll()
         await fetchHeadlines()
+    }
+    
+    //Pagination
+    func loadMoreArticles() async {
+        guard !isLoadingMore && hasMoreArticles else { return }
+        isLoadingMore = true
+        currentPage += 1
+        await loadData(currentPage)
+        isLoadingMore = false
     }
 
 }
