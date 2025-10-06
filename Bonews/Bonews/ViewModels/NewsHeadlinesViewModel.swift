@@ -16,18 +16,24 @@ class NewsHeadlinesViewModel: ObservableObject {
     @Published var lastRefreshDate: Date?
     @Published var hasMoreArticles = true
     @Published var isLoadingMore = false
+    @Published var isUsingCache = false
     
     private var currentPage = 1
     private let apiService = ApiRequest()
+    private let dataManager = DataManager.shared
     private var apikey : String {
         guard let apikey =  Bundle.main.object(forInfoDictionaryKey: "API_KEY") as? String else {
-            print("apiKey not found")
+            debugPrint("apiKey not found")
             return ""
         }
        return apikey
     }
     
     init() {
+        // Load from cache initially on startup
+        Task {
+            await loadFromCache()
+        }
     }
     
     // MARK: - Fetch News Headlines via ViewModel
@@ -35,8 +41,25 @@ class NewsHeadlinesViewModel: ObservableObject {
     func fetchHeadlines() async {
         isLoading = true
         errorMessage = nil
+        isUsingCache = false
+        
+        if articles.isEmpty {
+            await loadFromCache()
+        }
+    
         await loadData()
         isLoading = false
+    }
+    
+    // Load data from cache
+    private func loadFromCache() async {
+        let cachedArticles = await dataManager.loadArticles()
+        if !cachedArticles.isEmpty {
+            articles = cachedArticles
+            isUsingCache = true
+            lastRefreshDate = cachedArticles.first?.publishedDate != nil ?
+                ISO8601DateFormatter().date(from: cachedArticles.first!.publishedDate!) : Date()
+        }
     }
     
     // Load data from api
@@ -53,19 +76,40 @@ class NewsHeadlinesViewModel: ObservableObject {
                 let articlesWithImages = await loadImagesForArticles(newsArticles)
                 
                 // Update UI with fresh data
-                articles.append(contentsOf: articlesWithImages)
+                if currentPage == 1 {
+                    articles = articlesWithImages
+                } else {
+                    articles.append(contentsOf: articlesWithImages)
+                }
+                
+                // Cache the articles using SwiftData
+                await dataManager.saveArticles(articles)
+                isUsingCache = false
                 lastRefreshDate = Date()
                 hasMoreArticles = true
+                
             } else {
                 hasMoreArticles = false
             }
         } catch {
+            debugPrint("\(error.localizedDescription)")
+            
+            // If API fails and we don't have cached data, try to load from cache
+            if articles.isEmpty {
+                await loadFromCache()
+                if articles.isEmpty {
+                    errorMessage = "Failed to fetch news. Please check your internet connection and try again."
+                } else {
+                    errorMessage = "Showing cached news. Pull to refresh to get latest updates."
+                }
+            } else {
+                errorMessage = "Failed to fetch latest news: \(error.localizedDescription)"
+            }
+            
             if currentPage != 1 {
                 self.currentPage -= 1
             }
-            errorMessage = "Failed to fetch latest news: \(error.localizedDescription)"
         }
-        
     }
     
     // model fetch data into NewsArticle
@@ -88,29 +132,26 @@ class NewsHeadlinesViewModel: ObservableObject {
         
     // Load images for articles
     private func loadImagesForArticles(_ articles: [NewsArticle]) async -> [NewsArticle] {
-        return await withTaskGroup(of: NewsArticle.self) {[weak self] group in
-            var articlesWithImages: [NewsArticle] = []
-            for article in articles {
-                group.addTask {
-                    var updatedArticle = article
-                    if let imageURL = article.imageURL {
-                        do {
-                            let image = try await self?.apiService.requestImage(ApiRequestBuilder.init(rawURL: imageURL))
-                            updatedArticle.loadedImage = image
-                        } catch {
-                            print("Failed to load image for article: \(String(describing:article.title))")
-                        }
-                    }
-                    return updatedArticle
+        var articlesWithImages: [NewsArticle] = []
+        
+        for article in articles {
+            let updatedArticle = article
+            
+            if let imageURL = article.imageURL, Validator.isValidURL(article.imageURL) {
+                do {
+                    let fetchedImage = try await apiService.requestImage(ApiRequestBuilder.init(rawURL: imageURL))
+                    updatedArticle.loadedImage = fetchedImage
+                   
+                    await dataManager.saveCachedImage(fetchedImage, for: article.id)
+                } catch {
+                    debugPrint("Failed to load image for article: \(String(describing:article.title))")
                 }
             }
             
-            for await article in group {
-                articlesWithImages.append(article)
-            }
-            
-            return articlesWithImages
+            articlesWithImages.append(updatedArticle)
         }
+        
+        return articlesWithImages
     }
 }
 
@@ -120,6 +161,7 @@ extension NewsHeadlinesViewModel {
         hasMoreArticles = true
         currentPage = 1
         articles.removeAll()
+        isUsingCache = false
         await fetchHeadlines()
     }
     
@@ -131,6 +173,5 @@ extension NewsHeadlinesViewModel {
         await loadData(currentPage)
         isLoadingMore = false
     }
-
 }
 
