@@ -14,6 +14,7 @@ struct NewsArticleCardView: View {
     @Environment(\.dynamicTypeSize) var dynamicTypeSize
         
     var body: some View {
+        // Load beforehand all the required dynamic font, image height and width.
         let (width, height, isLandscape) = LayoutHelper.screenDimensions(from: geometry)
         let imageWidth = LayoutHelper.dynamicImageWidth(screenWidth: width, isFullWidth: isFullWidth, isLandscape: isLandscape)
         let imageHeight = LayoutHelper.dynamicImageHeight(screenHeight: height, dynamicImageWidth: imageWidth, isFullWidth: isFullWidth, isLandscape: isLandscape)
@@ -69,11 +70,11 @@ struct NewsArticleCardView: View {
                     .foregroundColor(.secondary)
             }
         }
+        .frame(maxWidth: .infinity, maxHeight: isFullWidth ? .infinity : 280, alignment: .leading)
         .padding()
         .background(Color(.systemBackground))
         .cornerRadius(12)
         .shadow(radius: 4)
-        .frame(maxWidth: .infinity, alignment: .leading)
     }
     
     private var relativeTimeString: String {

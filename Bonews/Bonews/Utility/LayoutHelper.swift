@@ -24,7 +24,7 @@ final class LayoutHelper {
         isLandscape: Bool
     ) -> CGFloat {
         if isFullWidth {
-            return screenWidth * 0.7
+            return isLandscape ? screenWidth * 0.8 : screenWidth * 0.7
         } else {
             let baseWidth = screenWidth * 0.3
             let minWidth: CGFloat = 120
@@ -41,7 +41,7 @@ final class LayoutHelper {
         isLandscape: Bool
     ) -> CGFloat {
         if isFullWidth {
-            let baseHeight = screenHeight * 0.25
+            let baseHeight = isLandscape ? screenHeight * 0.4 : screenHeight * 0.25
             return baseHeight
         } else {
             let aspectRatio: CGFloat = isLandscape ? 0.6 : 0.8

@@ -20,18 +20,9 @@ struct NewsHeadlinesView: View {
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                 } else if viewModel.articles.isEmpty {
                     VStack(spacing: 16) {
-                        Image(systemName: "newspaper")
-                            .font(.system(size: 50))
-                            .foregroundColor(.secondary)
                         Text("No news available")
                             .font(.title2)
                             .foregroundColor(.secondary)
-                        Button("Refresh") {
-                            Task {
-                                await viewModel.refresh()
-                            }
-                        }
-                        .buttonStyle(.borderedProminent)
                     }
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                 } else {
@@ -116,7 +107,9 @@ struct NewsHeadlinesView: View {
     
     private func paginate(index: Int) {
         // Load more articles when reaching the last few items
-        if index >= viewModel.articles.count - 1 && viewModel.hasMoreArticles && !viewModel.isLoadingMore {
+        if index >= viewModel.articles.count - 4
+            && viewModel.hasMoreArticles
+            && !viewModel.isLoadingMore {
             Task{
                 await viewModel.loadMoreArticles()
             }
@@ -124,18 +117,14 @@ struct NewsHeadlinesView: View {
     }
     
     private func gridColumns(for geometry: GeometryProxy) -> [GridItem] {
-        let screenWidth = geometry.size.width
         let isLandscape = geometry.isLandscape()
         
-        // Calculate optimal column count based on screen width
-        let minCardWidth: CGFloat = 150 // Minimum card width
-        let maxColumns = Int(screenWidth / minCardWidth)
-        
         let columnCount: Int
+        
         if isLandscape {
-            columnCount = min(maxColumns, 3) // 3 columns in landscape
+            columnCount = 3 // 3 columns in landscape
         } else {
-            columnCount = min(maxColumns, 2) // 2 columns in portrait
+            columnCount = 2 // 2 columns in portrait
         }
         
         return Array(repeating: GridItem(.flexible(), spacing: dynamicSpacing), count: max(1, columnCount))
@@ -148,6 +137,7 @@ struct NewsHeadlinesView: View {
         return baseSpacing * typeSizeMultiplier
     }
 }
+
 
 
 #Preview {
