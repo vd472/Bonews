@@ -19,9 +19,8 @@ protocol ApiServiceProtocol {
 final class ApiRequest: ApiServiceProtocol {
     
     init() {}
-
     
-    // MARK: - private functions
+    // MARK: - Common method for request of image and news
     private func executeRequest(_ request: ApiRequestType) async throws -> Data {
         guard var components = URLComponents(url: request.url!, resolvingAgainstBaseURL: false) else {
             throw ApiError.invalidURL
@@ -57,13 +56,12 @@ final class ApiRequest: ApiServiceProtocol {
 
 // MARK: - Extension of ApiRequest confirming the protocol ApiServiceProtocol
 extension ApiRequest {
-    
     // MARK: - request headlines
     func request<T: Codable>(_ request: ApiRequestType, responseType: T.Type) async throws -> T {
         let data = try await executeRequest(request)
         return try JSONDecoder().decode(T.self, from: data)
     }
-    
+
     // MARK: - request image
     func requestImage(_ request: ApiRequestType) async throws -> UIImage {
         let data = try await executeRequest(request)
