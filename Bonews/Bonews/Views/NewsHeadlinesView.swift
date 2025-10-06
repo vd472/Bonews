@@ -100,7 +100,9 @@ struct NewsHeadlinesView: View {
                 }
             }
             .sheet(item: $selectedArticle) { article in
-                NewsDetailView(article: article)
+                NavigationStack {
+                    NewsDetailView(article: article)
+                }
             }
         }
     }
