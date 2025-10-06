@@ -50,6 +50,6 @@ struct ApiRequestBuilder: ApiRequestType {
     
     // MARK: - Fetching the image
     init(rawURL: String) {
-            self.url = URL(string: rawURL)
-        }
+        self.url = URL(string: rawURL)
+    }
 }
