@@ -6,8 +6,27 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXContainerItemProxy section */
+		05D68E2B2E9449880002944D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0538B9B72E8FE870008D80F0 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 0538B9BE2E8FE870008D80F0;
+			remoteInfo = Bonews;
+		};
+		05D68E3A2E9449C40002944D /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0538B9B72E8FE870008D80F0 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 0538B9BE2E8FE870008D80F0;
+			remoteInfo = Bonews;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		0538B9BF2E8FE870008D80F0 /* Bonews.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Bonews.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		05D68E272E9449880002944D /* BonewsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BonewsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		05D68E342E9449C40002944D /* BonewsUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BonewsUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -29,10 +48,34 @@
 			path = Bonews;
 			sourceTree = "<group>";
 		};
+		05D68E282E9449880002944D /* BonewsTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = BonewsTests;
+			sourceTree = "<group>";
+		};
+		05D68E352E9449C40002944D /* BonewsUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = BonewsUITests;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		0538B9BC2E8FE870008D80F0 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		05D68E242E9449880002944D /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		05D68E312E9449C40002944D /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -46,6 +89,8 @@
 			isa = PBXGroup;
 			children = (
 				0538B9C12E8FE870008D80F0 /* Bonews */,
+				05D68E282E9449880002944D /* BonewsTests */,
+				05D68E352E9449C40002944D /* BonewsUITests */,
 				0538B9C02E8FE870008D80F0 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -54,6 +99,8 @@
 			isa = PBXGroup;
 			children = (
 				0538B9BF2E8FE870008D80F0 /* Bonews.app */,
+				05D68E272E9449880002944D /* BonewsTests.xctest */,
+				05D68E342E9449C40002944D /* BonewsUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -83,6 +130,52 @@
 			productReference = 0538B9BF2E8FE870008D80F0 /* Bonews.app */;
 			productType = "com.apple.product-type.application";
 		};
+		05D68E262E9449880002944D /* BonewsTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 05D68E2D2E9449880002944D /* Build configuration list for PBXNativeTarget "BonewsTests" */;
+			buildPhases = (
+				05D68E232E9449880002944D /* Sources */,
+				05D68E242E9449880002944D /* Frameworks */,
+				05D68E252E9449880002944D /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				05D68E2C2E9449880002944D /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				05D68E282E9449880002944D /* BonewsTests */,
+			);
+			name = BonewsTests;
+			packageProductDependencies = (
+			);
+			productName = BonewsTests;
+			productReference = 05D68E272E9449880002944D /* BonewsTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		05D68E332E9449C40002944D /* BonewsUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 05D68E3C2E9449C40002944D /* Build configuration list for PBXNativeTarget "BonewsUITests" */;
+			buildPhases = (
+				05D68E302E9449C40002944D /* Sources */,
+				05D68E312E9449C40002944D /* Frameworks */,
+				05D68E322E9449C40002944D /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				05D68E3B2E9449C40002944D /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				05D68E352E9449C40002944D /* BonewsUITests */,
+			);
+			name = BonewsUITests;
+			packageProductDependencies = (
+			);
+			productName = BonewsUITests;
+			productReference = 05D68E342E9449C40002944D /* BonewsUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -95,6 +188,14 @@
 				TargetAttributes = {
 					0538B9BE2E8FE870008D80F0 = {
 						CreatedOnToolsVersion = 26.0.1;
+					};
+					05D68E262E9449880002944D = {
+						CreatedOnToolsVersion = 26.0.1;
+						TestTargetID = 0538B9BE2E8FE870008D80F0;
+					};
+					05D68E332E9449C40002944D = {
+						CreatedOnToolsVersion = 26.0.1;
+						TestTargetID = 0538B9BE2E8FE870008D80F0;
 					};
 				};
 			};
@@ -113,12 +214,28 @@
 			projectRoot = "";
 			targets = (
 				0538B9BE2E8FE870008D80F0 /* Bonews */,
+				05D68E262E9449880002944D /* BonewsTests */,
+				05D68E332E9449C40002944D /* BonewsUITests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		0538B9BD2E8FE870008D80F0 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		05D68E252E9449880002944D /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		05D68E322E9449C40002944D /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -135,7 +252,34 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		05D68E232E9449880002944D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		05D68E302E9449C40002944D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		05D68E2C2E9449880002944D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 0538B9BE2E8FE870008D80F0 /* Bonews */;
+			targetProxy = 05D68E2B2E9449880002944D /* PBXContainerItemProxy */;
+		};
+		05D68E3B2E9449C40002944D /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 0538B9BE2E8FE870008D80F0 /* Bonews */;
+			targetProxy = 05D68E3A2E9449C40002944D /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		0538B9C82E8FE871008D80F0 /* Debug */ = {
@@ -325,6 +469,88 @@
 			};
 			name = Release;
 		};
+		05D68E2E2E9449880002944D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 5AM38HDB97;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.vijayesh.BonewsTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Bonews.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Bonews";
+			};
+			name = Debug;
+		};
+		05D68E2F2E9449880002944D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 5AM38HDB97;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.vijayesh.BonewsTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Bonews.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Bonews";
+			};
+			name = Release;
+		};
+		05D68E3D2E9449C40002944D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 5AM38HDB97;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.vijayesh.BonewsUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Bonews;
+			};
+			name = Debug;
+		};
+		05D68E3E2E9449C40002944D /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 5AM38HDB97;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.vijayesh.BonewsUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Bonews;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -342,6 +568,24 @@
 			buildConfigurations = (
 				0538B9CB2E8FE871008D80F0 /* Debug */,
 				0538B9CC2E8FE871008D80F0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		05D68E2D2E9449880002944D /* Build configuration list for PBXNativeTarget "BonewsTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				05D68E2E2E9449880002944D /* Debug */,
+				05D68E2F2E9449880002944D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		05D68E3C2E9449C40002944D /* Build configuration list for PBXNativeTarget "BonewsUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				05D68E3D2E9449C40002944D /* Debug */,
+				05D68E3E2E9449C40002944D /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
