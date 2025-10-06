@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 @main
 struct BonewsApp: App {
@@ -15,5 +16,6 @@ struct BonewsApp: App {
                 NewsHeadlinesView()
             }
         }
+        .modelContainer(for: NewsArticle.self)
     }
 }
