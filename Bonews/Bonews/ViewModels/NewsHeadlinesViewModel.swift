@@ -170,7 +170,7 @@ extension NewsHeadlinesViewModel {
     func handleSpecificError(_ error: Error) async {
         if let apiError = error as? ApiError {
               switch apiError {
-              case .rateLimited(let message):
+              case .rateLimited(_):
                   // Handle rate limiting specifically
                   if articles.isEmpty {
                       await loadFromCache()
