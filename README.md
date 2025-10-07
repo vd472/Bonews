@@ -3,6 +3,7 @@ A news app that highlights clean architecture and SOLID principles in iOS
 
 Requirements
 - Xcode 26.0.1
+- API_KEY from https://newsapi.org/. (Update it in plist)
 
 App functionalities
 - Async/ Await Api Calls
