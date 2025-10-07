@@ -68,7 +68,7 @@ class NewsHeadlinesViewModel: ObservableObject {
             // Fetch from API
             let fetchedData = try await apiService.request(ApiRequestBuilder.init(apiKey: apikey, page: currentPage), responseType: NewsResponse.self)
             
-            if fetchedData.articles.count != 0 {
+            if fetchedData.articles?.count != 0 {
                 // model fetch data into NewsArticle
                 let newsArticles = await loadNewsArticle(fetchedData)
                 
@@ -94,18 +94,9 @@ class NewsHeadlinesViewModel: ObservableObject {
         } catch {
             debugPrint("\(error.localizedDescription)")
             
-            // If API fails and we don't have cached data, try to load from cache
-            if articles.isEmpty {
-                await loadFromCache()
-                if articles.isEmpty {
-                    errorMessage = "Failed to fetch news. Please check your internet connection and try again."
-                } else {
-                    errorMessage = "Showing cached news. Pull to refresh to get latest updates."
-                }
-            } else {
-                errorMessage = "Failed to fetch latest news: \(error.localizedDescription)"
-            }
-            
+            // Handle specific error types
+            await handleSpecificError(error)
+         
             if currentPage != 1 {
                 self.currentPage -= 1
             }
@@ -114,7 +105,8 @@ class NewsHeadlinesViewModel: ObservableObject {
     
     // model fetch data into NewsArticle
     private func loadNewsArticle(_ fetchedData: NewsResponse) async  -> [NewsArticle] {
-        return fetchedData.articles.compactMap { (article: Article) -> NewsArticle? in
+        guard let articles = fetchedData.articles else { return [] }
+        return articles.compactMap { (article: Article) -> NewsArticle? in
             guard let title = article.title,
                   let description = article.description else { return nil }
             
@@ -172,6 +164,51 @@ extension NewsHeadlinesViewModel {
         currentPage += 1
         await loadData(currentPage)
         isLoadingMore = false
+    }
+    
+    //Error Handling
+    func handleSpecificError(_ error: Error) async {
+        if let apiError = error as? ApiError {
+              switch apiError {
+              case .rateLimited(let message):
+                  // Handle rate limiting specifically
+                  if articles.isEmpty {
+                      await loadFromCache()
+                      if articles.isEmpty {
+                          errorMessage = "API rate limit exceeded. Please try again later or upgrade your plan for more requests."
+                      } else {
+                          errorMessage = "Rate limit exceeded. Showing cached news. Please try again later."
+                      }
+                  } else {
+                      errorMessage = "Rate limit exceeded. Showing cached news. Please try again later."
+                  }
+              default:
+                  // Handle other API errors
+                  if articles.isEmpty {
+                      await loadFromCache()
+                      if articles.isEmpty {
+                          errorMessage = "Failed to fetch news. Please check your internet connection and try again."
+                      } else {
+                          errorMessage = "Showing cached news. Pull to refresh to get latest updates."
+                      }
+                  } else {
+                      errorMessage = "Failed to fetch latest news: \(error.localizedDescription)"
+                  }
+              }
+          } else {
+              // Handle non-API errors
+              if articles.isEmpty {
+                  await loadFromCache()
+                  if articles.isEmpty {
+                      errorMessage = "Failed to fetch news. Please check your internet connection and try again."
+                  } else {
+                      errorMessage = "Showing cached news. Pull to refresh to get latest updates."
+                  }
+              } else {
+                  errorMessage = "Failed to fetch latest news: \(error.localizedDescription)"
+              }
+          }
+
     }
 }
 

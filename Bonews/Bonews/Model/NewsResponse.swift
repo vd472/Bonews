@@ -10,8 +10,9 @@ import Foundation
 // MARK: - NewsResponse
 struct NewsResponse: Codable {
     let status: String
+    let code: String?
     let totalResults: Int
-    let articles: [Article]
+    let articles: [Article]?
 }
 
 // MARK: - Article

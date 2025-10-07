@@ -16,6 +16,7 @@ enum ApiError: LocalizedError {
     case noData
     case requestError(underlyingError: Error)
     case timeout
+    case rateLimited(message: String)
 
     var errorDescription: String? {
         switch self {
@@ -33,6 +34,8 @@ enum ApiError: LocalizedError {
             return "An error occurred during the request: \(underlyingError.localizedDescription)"
         case .timeout:
             return "Timeout"
+        case .rateLimited(let message):
+            return "Rate limit exceeded: \(message)"
         }
     }
 }

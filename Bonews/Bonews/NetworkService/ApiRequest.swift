@@ -23,7 +23,7 @@ final class ApiRequest: ApiServiceProtocol {
     // MARK: - Common method for request of image and news
     private func executeRequest(_ request: ApiRequestType) async throws -> Data {
         
-        guard let url = request.url else {
+        guard let _ = request.url else {
             throw ApiError.invalidURL
         }
         
@@ -68,7 +68,30 @@ extension ApiRequest {
     // MARK: - request headlines
     nonisolated func request<T: Codable>(_ request: ApiRequestType, responseType: T.Type) async throws -> T {
         let data = try await executeRequest(request)
-        return try JSONDecoder().decode(T.self, from: data)
+        let decoder = JSONDecoder()
+        do {
+            return try decoder.decode(T.self, from: data)
+        } catch {
+            if let isNewsResponseError = await checkForNewsResponseError(data: data, decoder: decoder) {
+                throw isNewsResponseError
+            }
+            throw ApiError.decodingError(underlyingError: error)
+       }
+    }
+    
+    @MainActor
+    private func checkForNewsResponseError(data: Data, decoder: JSONDecoder) -> ApiError? {
+        guard let newsResponse = try? decoder.decode(NewsResponse.self, from: data) else {
+            return nil
+        }
+        if newsResponse.status == "error" {
+            if newsResponse.code == "rateLimited" {
+                return ApiError.rateLimited(message: "Rate limit exceeded")
+            } else {
+                return ApiError.httpError(statusCode: 400)
+            }
+        }
+        return nil
     }
 
     // MARK: - request image
